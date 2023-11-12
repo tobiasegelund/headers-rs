@@ -1,5 +1,5 @@
 [package]
-name = "headers-rs"
+name = "headers"
 version = "0.1.0"
 edition = "2021"
 

@@ -8,7 +8,7 @@ struct Args {
     url: String,
 }
 
-fn add_protocol<'a>(url: &'a str) -> String {
+fn add_protocol(url: &str) -> String {
     if !url.starts_with("https://") {
         return format!("https://{}", url);
     }
@@ -16,10 +16,14 @@ fn add_protocol<'a>(url: &'a str) -> String {
 }
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = Args::parse();
     let url = add_protocol(&args.url);
-    let resp = reqwest::get(url).await.unwrap();
+    let resp = reqwest::get(url).await?;
 
-    println!("{:?}", resp.headers())
+    resp.headers()
+        .iter()
+        .for_each(|(k, v)| println!("{}, {:?}", k, v));
+
+    return Ok(());
 }
